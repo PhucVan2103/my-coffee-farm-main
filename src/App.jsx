@@ -26,7 +26,7 @@ import {
 //const supabase = null; 
 
 // Khóa API Gemini
-const apiKey = ""; 
+const apiKey = "AIzaSyBw7vzlZ8ypfqVVyl8zBTsZBzULzN51q-I"; 
 
 // --- HELPER: GỌI API VỚI EXPONENTIAL BACKOFF ---
 const fetchWithRetry = async (url, options, retries = 5, backoff = 1000) => {
