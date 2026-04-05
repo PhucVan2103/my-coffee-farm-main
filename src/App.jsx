@@ -4,7 +4,7 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-import import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 // Chú ý: Đã tạm ẩn import supabase-js để tránh lỗi biên dịch trong môi trường xem trước. 
 // Khi chạy thực tế trên máy tính, bạn có thể bỏ comment dòng bên dưới:
 // import { createClient } from '@supabase/supabase-js';
@@ -18,12 +18,9 @@ import {
 } from 'lucide-react';
 
 // --- 1. CẤU HÌNH KẾT NỐI API ---
-const supabaseUrl = ''; 
-const supabaseAnonKey = ''; 
 
 // Giả lập client cho môi trường xem trước (Preview)
 // Khi chạy thực tế: const supabase = createClient(supabaseUrl, supabaseAnonKey);
-const supabase = null; 
 
 // Khóa API Gemini
 const apiKey = ""; 
