@@ -18,9 +18,12 @@ import {
 } from 'lucide-react';
 
 // --- 1. CẤU HÌNH KẾT NỐI API ---
+//const supabaseUrl = ''; 
+//const supabaseAnonKey = ''; 
 
 // Giả lập client cho môi trường xem trước (Preview)
 // Khi chạy thực tế: const supabase = createClient(supabaseUrl, supabaseAnonKey);
+//const supabase = null; 
 
 // Khóa API Gemini
 const apiKey = ""; 
@@ -420,19 +423,95 @@ const App = () => {
         
         {/* TAB 1: DASHBOARD */}
         {activeTab === 'dashboard' && (
-          <div className="max-w-6xl mx-auto space-y-8 animate-in fade-in">
+          <div className="max-w-6xl mx-auto space-y-6 md:space-y-8 animate-in fade-in">
             <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
                 <h2 className="text-2xl md:text-3xl font-black text-slate-800 tracking-tight">Chào buổi sáng! ✨</h2>
-                <p className="text-slate-400 font-bold text-xs mt-1">Vườn cà phê của bạn đang được quản lý trực tuyến.</p>
+                <p className="text-slate-400 font-bold text-xs mt-1">Tổng quan tình hình vườn cà phê hôm nay.</p>
+              </div>
+              <div className="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-3">
+                 <div className="p-2 bg-orange-50 text-orange-500 rounded-xl"><Bell size={16} /></div>
+                 <div className="text-right leading-none">
+                    <p className="text-[9px] font-black text-slate-400 uppercase mb-1 tracking-widest">Thông báo</p>
+                    <p className="text-xs font-bold text-slate-700 uppercase">{tasks.filter(t=>!t.completed).length} việc cần làm</p>
+                 </div>
               </div>
             </header>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-              <div className="bg-white p-6 rounded-[28px] border border-slate-100 shadow-sm"><p className="text-[9px] font-black text-slate-400 uppercase mb-1 tracking-widest">Chi đầu tư</p><h3 className="text-lg md:text-xl font-black text-red-500">{new Intl.NumberFormat('vi-VN').format(stats.chi)} đ</h3></div>
-              <div className="bg-white p-6 rounded-[28px] border border-slate-100 shadow-sm"><p className="text-[9px] font-black text-slate-400 uppercase mb-1 tracking-widest">Doanh thu</p><h3 className="text-lg md:text-xl font-black text-emerald-600">{new Intl.NumberFormat('vi-VN').format(stats.thu)} đ</h3></div>
-              <div className="bg-emerald-600 p-6 rounded-[28px] text-white shadow-xl shadow-emerald-100"><p className="text-[9px] font-black opacity-60 uppercase mb-1 tracking-widest">Lợi nhuận</p><h3 className="text-lg md:text-xl font-black">{new Intl.NumberFormat('vi-VN').format(stats.loiNhuan)} đ</h3></div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
+              <div className="bg-white p-6 rounded-[28px] border border-slate-100 shadow-sm group hover:shadow-md transition-all">
+                <div className="flex justify-between items-start mb-2"><p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Chi đầu tư</p><TrendingDown className="text-red-400" size={14} /></div>
+                <h3 className="text-lg md:text-xl font-black text-red-500">{new Intl.NumberFormat('vi-VN').format(stats.chi)} đ</h3>
+              </div>
+              <div className="bg-white p-6 rounded-[28px] border border-slate-100 shadow-sm group hover:shadow-md transition-all">
+                <div className="flex justify-between items-start mb-2"><p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Doanh thu</p><TrendingUp className="text-emerald-400" size={14} /></div>
+                <h3 className="text-lg md:text-xl font-black text-emerald-600">{new Intl.NumberFormat('vi-VN').format(stats.thu)} đ</h3>
+              </div>
+              <div className="bg-emerald-600 p-6 rounded-[28px] text-white shadow-xl shadow-emerald-100 group">
+                <div className="flex justify-between items-start mb-2"><p className="text-[9px] font-black opacity-60 uppercase tracking-widest">Lợi nhuận</p><CircleDollarSign className="opacity-60" size={14} /></div>
+                <h3 className="text-lg md:text-xl font-black">{new Intl.NumberFormat('vi-VN').format(stats.loiNhuan)} đ</h3>
+              </div>
             </div>
-            <InteractiveTree tasks={tasks} onToggleTask={toggleTask} />
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+              <div className="lg:col-span-8 space-y-4">
+                <div className="flex items-center justify-between px-2">
+                   <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">Mô phỏng vườn thực tế</h3>
+                   <span className="text-[10px] font-black text-emerald-500 bg-emerald-50 px-2 py-0.5 rounded-full flex items-center gap-1"><div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />TRỰC TUYẾN</span>
+                </div>
+                <InteractiveTree tasks={tasks} onToggleTask={toggleTask} />
+              </div>
+              
+              <div className="lg:col-span-4 space-y-6">
+                {/* Tiện ích Việc sắp tới */}
+                <div className="bg-white p-6 rounded-[32px] border border-slate-100 shadow-sm">
+                  <div className="flex justify-between items-center mb-6">
+                     <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest">Việc sắp tới</h3>
+                     <button onClick={() => setActiveTab('care')} className="text-[9px] font-black text-emerald-500 hover:underline uppercase bg-emerald-50 px-2 py-1 rounded-md">Xem tất cả</button>
+                  </div>
+                  <div className="space-y-4">
+                    {tasks.filter(t => !t.completed).slice(0, 3).map(t => (
+                      <div key={t.id} className="flex items-center gap-3 group cursor-pointer" onClick={() => toggleTask(t.id, t.completed)}>
+                        <div className={`p-2.5 rounded-2xl transition-colors ${t.type === 'Tưới nước' ? 'bg-blue-50 text-blue-500 group-hover:bg-blue-500 group-hover:text-white' : 'bg-orange-50 text-orange-500 group-hover:bg-orange-500 group-hover:text-white'}`}>
+                          {t.type === 'Tưới nước' ? <Droplets size={18} /> : <Sprout size={18} />}
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-xs font-black text-slate-800 uppercase leading-none mb-1 group-hover:text-emerald-600 transition-colors">{t.type}</p>
+                          <p className="text-[9px] font-bold text-slate-400 uppercase">{t.date} • <span className={`${t.priority === 'Cao' ? 'text-red-400' : ''}`}>{t.priority}</span></p>
+                        </div>
+                        <div className="w-6 h-6 rounded-full border-2 border-slate-200 flex items-center justify-center group-hover:border-emerald-500 group-hover:bg-emerald-50 transition-all">
+                           <CheckCircle2 size={12} className="text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </div>
+                      </div>
+                    ))}
+                    {tasks.filter(t => !t.completed).length === 0 && (
+                      <div className="text-center py-6">
+                        <CheckCircle2 size={32} className="mx-auto text-emerald-400 mb-3 opacity-30" />
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Đã hoàn thành mọi việc!</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Tiện ích Ghi chú gần nhất */}
+                <div className="bg-emerald-50 p-6 rounded-[32px] border border-emerald-100 shadow-sm relative overflow-hidden group hover:shadow-md transition-all cursor-pointer" onClick={() => setActiveTab('notes')}>
+                   <div className="absolute -right-4 -top-4 opacity-10 group-hover:scale-110 transition-transform"><StickyNote size={80} className="text-emerald-600" /></div>
+                   <h3 className="text-xs font-black text-emerald-800 uppercase tracking-widest mb-4 relative z-10 flex items-center gap-2"><StickyNote size={14}/> Ghi chú gần nhất</h3>
+                   {notes.length > 0 ? (
+                     <div className="relative z-10">
+                       <h4 className="text-sm font-black text-emerald-900 mb-1.5 uppercase">{notes[0].title}</h4>
+                       <p className="text-xs text-emerald-700/80 line-clamp-2 italic font-medium leading-relaxed">"{notes[0].content}"</p>
+                       <div className="flex items-center justify-between mt-4">
+                         <span className="text-[9px] font-black text-emerald-600 uppercase bg-emerald-100/50 px-2 py-1 rounded-md">{notes[0].category}</span>
+                         <span className="text-[9px] font-bold text-emerald-600/60 uppercase">{notes[0].date}</span>
+                       </div>
+                     </div>
+                   ) : (
+                     <p className="text-[10px] font-bold text-emerald-600/60 uppercase relative z-10">Chưa có ghi chú nào.</p>
+                   )}
+                </div>
+              </div>
+            </div>
           </div>
         )}
 
